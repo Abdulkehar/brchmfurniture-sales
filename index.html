@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Berchuma Furniture Sales Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 16px; /* Increased base font size */
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px; /* Increased heading size */
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px; /* Increased table font size */
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px; /* Increased padding for better spacing */
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px 5px;
+            padding: 10px 20px; /* Increased button padding */
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px; /* Increased button font size */
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px; /* Increased padding for delete button */
+            cursor: pointer;
+            font-size: 16px; /* Increased delete button font size */
+        }
+        textarea {
+            width: 100%;
+            height: 50px; /* Default height */
+            resize: none;
+            padding: 5px;
+            box-sizing: border-box;
+            font-size: 16px; /* Increased textarea font size */
+        }
+        /* Smaller input fields for numeric values */
+        .small-input {
+            width: 80px; /* Smaller width for numeric inputs */
+            padding: 5px;
+            font-size: 16px; /* Consistent font size */
+        }
+        /* Larger input fields for text entries */
+        .large-input {
+            width: calc(100% - 10px); /* Fill the available space */
+            height: 50px; /* Increased height for better visibility */
+            padding: 5px;
+            font-size: 16px; /* Consistent font size */
+        }
+        /* Additional larger input for the Furniture Type to accommodate 100 characters */
+        .extra-large-input {
+            width: calc(100% - 10px); /* Full width for more text */
+            height: 100px; /* Increased height for better visibility */
+            padding: 5px;
+            font-size: 16px; /* Consistent font size */
+        }
+        /* Increased size for checkbox */
+        .checkbox {
+            width: 25px; /* Increased width for checkbox */
+            height: 25px; /* Increased height for checkbox */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Berchuma Furniture Sales Tracking for <span id="currentMonth">January</span></h1>
+
+<div class="container">
+    <table id="paymentTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Prepaid Amount</th>
+                <th>Item Value</th>
+                <th>Payment Date</th>
+                <th>Furniture Type</th>
+                <th>Manufacturing Days</th>
+                <th>Confirmed Payment</th>
+                <th>Delete Row</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<!-- Button section for actions, including the new Save button -->
+<button class="button" onclick="addRow()">Add Row</button>
+<button class="button" onclick="previousMonth()">Previous Month</button>
+<button class="button" onclick="nextMonth()">Next Month</button>
+<button class="button" onclick="goToCurrentMonth()">Current Month</button>
+<button class="button" onclick="saveCurrentMonthData()">Save Data</button> <!-- Save Data button -->
+
+<script>
+    // Initialize month and data structure to store data for each month
+    let currentMonthIndex = 0;
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthlyData = {};
+
+    // Load saved data from localStorage
+    function loadData() {
+        const savedData = JSON.parse(localStorage.getItem('paymentData')) || {};
+        Object.assign(monthlyData, savedData);
+        updateTable();
+    }
+
+    // Save data to localStorage
+    function saveData() {
+        localStorage.setItem('paymentData', JSON.stringify(monthlyData));
+        alert("Data Saved Successfully!"); // Optional alert for feedback
+    }
+
+    // Update table and title with the current month's data
+    function updateTable() {
+        const table = document.getElementById('paymentTable').querySelector('tbody');
+        table.innerHTML = ''; // Clear table
+        const currentMonth = months[currentMonthIndex];
+
+        if (!monthlyData[currentMonth]) {
+            monthlyData[currentMonth] = [];
+        }
+
+        monthlyData[currentMonth].forEach((rowData, index) => addRow(rowData, index));
+
+        // Update title with the current month
+        document.getElementById('currentMonth').textContent = currentMonth;
+    }
+
+    // Add a new row to the table
+    function addRow(data = {name: '', phone: '', prepaid: '', value: '', date: '', furniture: '', days: '', confirmed: false}, index = null) {
+        const table = document.getElementById('paymentTable').querySelector('tbody');
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td><textarea class="large-input name" oninput="saveCurrentMonthData()">${data.name}</textarea></td>
+            <td><textarea class="large-input phone" oninput="saveCurrentMonthData()">${data.phone}</textarea></td>
+            <td><input type="number" class="small-input prepaid" value="${data.prepaid}" oninput="saveCurrentMonthData()" /></td>
+            <td><input type="number" class="small-input value" value="${data.value}" oninput="saveCurrentMonthData()" /></td>
+            <td><input type="date" class="small-input date" value="${data.date}" oninput="saveCurrentMonthData()" /></td>
+            <td><textarea class="extra-large-input furniture" rows="4" oninput="saveCurrentMonthData()" maxlength="100">${data.furniture}</textarea></td>
+            <td><input type="number" class="small-input days" value="${data.days}" oninput="saveCurrentMonthData()" /></td>
+            <td><input type="checkbox" class="checkbox confirmed" ${data.confirmed ? 'checked' : ''} onchange="saveCurrentMonthData()" /></td>
+            <td><button class="delete-btn" onclick="deleteRow(${index})">Delete</button></td>
+        `;
+
+        table.appendChild(row);
+    }
+
+    // Save data for the current month
+    function saveCurrentMonthData() {
+        const table = document.getElementById('paymentTable').querySelector('tbody');
+        const rows = table.querySelectorAll('tr');
+        const data = [];
+
+        rows.forEach(row => {
+            const name = row.querySelector('.name').value;
+            const phone = row.querySelector('.phone').value;
+            const prepaid = row.querySelector('.prepaid').value;
+            const value = row.querySelector('.value').value;
+            const date = row.querySelector('.date').value;
+            const furniture = row.querySelector('.furniture').value;
+            const days = row.querySelector('.days').value;
+            const confirmed = row.querySelector('.confirmed').checked;
+            data.push({ name, phone, prepaid, value, date, furniture, days, confirmed });
+        });
+
+        monthlyData[months[currentMonthIndex]] = data;
+        saveData(); // Call saveData() after updating data
+    }
+
+    // Delete a row based on index
+    function deleteRow(index) {
+        monthlyData[months[currentMonthIndex]].splice(index, 1);
+        updateTable();
+    }
+
+    // Move to the previous month and update the table and title
+    function previousMonth() {
+        currentMonthIndex = (currentMonthIndex - 1 + months.length) % months.length;
+        updateTable();
+    }
+
+    // Move to the next month and update the table and title
+    function nextMonth() {
+        currentMonthIndex = (currentMonthIndex + 1) % months.length;
+        updateTable();
+    }
+
+    // Go to the current month and update the table
+    function goToCurrentMonth() {
+        const now = new Date();
+        currentMonthIndex = now.getMonth(); // Set current month index
+        updateTable(); // Update table to show current month data
+    }
+
+    // Load data when the page is opened
+    window.onload = loadData;
+</script>
+
+</body>
+</html>
