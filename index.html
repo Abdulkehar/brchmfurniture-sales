@@ -164,21 +164,21 @@
         const row = document.createElement('tr');
 
         row.innerHTML = `
-            <td><textarea class="large-input name" oninput="saveCurrentMonthData()">${data.name}</textarea></td>
-            <td><textarea class="large-input phone" oninput="saveCurrentMonthData()">${data.phone}</textarea></td>
-            <td><input type="number" class="small-input prepaid" value="${data.prepaid}" oninput="saveCurrentMonthData()" /></td>
-            <td><input type="number" class="small-input value" value="${data.value}" oninput="saveCurrentMonthData()" /></td>
-            <td><input type="date" class="small-input date" value="${data.date}" oninput="saveCurrentMonthData()" /></td>
-            <td><textarea class="extra-large-input furniture" rows="4" oninput="saveCurrentMonthData()" maxlength="100">${data.furniture}</textarea></td>
-            <td><input type="number" class="small-input days" value="${data.days}" oninput="saveCurrentMonthData()" /></td>
-            <td><input type="checkbox" class="checkbox confirmed" ${data.confirmed ? 'checked' : ''} onchange="saveCurrentMonthData()" /></td>
+            <td><textarea class="large-input name">${data.name}</textarea></td>
+            <td><textarea class="large-input phone">${data.phone}</textarea></td>
+            <td><input type="number" class="small-input prepaid" value="${data.prepaid}" /></td>
+            <td><input type="number" class="small-input value" value="${data.value}" /></td>
+            <td><input type="date" class="small-input date" value="${data.date}" /></td>
+            <td><textarea class="extra-large-input furniture" rows="4" maxlength="100">${data.furniture}</textarea></td>
+            <td><input type="number" class="small-input days" value="${data.days}" /></td>
+            <td><input type="checkbox" class="checkbox confirmed" ${data.confirmed ? 'checked' : ''} /></td>
             <td><button class="delete-btn" onclick="deleteRow(${index})">Delete</button></td>
         `;
 
         table.appendChild(row);
     }
 
-    // Save data for the current month
+    // Save data for the current month only when "Save Data" button is clicked
     function saveCurrentMonthData() {
         const table = document.getElementById('paymentTable').querySelector('tbody');
         const rows = table.querySelectorAll('tr');
@@ -197,7 +197,7 @@
         });
 
         monthlyData[months[currentMonthIndex]] = data;
-        saveData(); // Call saveData() after updating data
+        saveData(); // Call saveData() only when button is clicked
     }
 
     // Delete a row based on index
@@ -231,3 +231,4 @@
 
 </body>
 </html>
+
