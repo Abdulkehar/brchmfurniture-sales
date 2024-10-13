@@ -5,147 +5,184 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Berchuma Furniture Sales Tracking</title>
     <style>
+        /* Updated styling for a more colorful and user-friendly design */
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            font-size: 16px; /* Increased base font size */
+            padding: 0;
         }
+        
         h1 {
             text-align: center;
-            font-size: 28px; /* Increased heading size */
-            margin-bottom: 20px;
+            color: #3b5998;
+            margin-top: 20px;
         }
+
+        .container {
+            width: 90%;
+            margin: 20px auto;
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 16px; /* Increased table font size */
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        table, th, td {
-            border: 1px solid #ddd;
+
+        thead tr {
+            background-color: #3b5998;
+            color: #fff;
         }
+
         th, td {
-            padding: 10px; /* Increased padding for better spacing */
+            padding: 12px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
-        th {
-            background-color: #f2f2f2;
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
+
+        tbody tr:hover {
+            background-color: #e0e7ff;
+        }
+
         .button {
-            display: inline-block;
-            margin: 10px 5px;
-            padding: 10px 20px; /* Increased button padding */
-            background-color: #4CAF50;
-            color: white;
+            background-color: #3b5998;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 4px;
+        }
+
+        .button:hover {
+            background-color: #2e4a7d;
+        }
+
+        .large-input, .small-input, .extra-large-input {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .checkbox {
+            width: auto;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: #fff;
             border: none;
             cursor: pointer;
-            font-size: 18px; /* Increased button font size */
+            padding: 8px 16px;
+            border-radius: 4px;
         }
-        .button:hover {
-            background-color: #45a049;
+
+        .delete-btn:hover {
+            background-color: #c0392b;
         }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #3b5998;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: auto;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #2e4a7d;
+        }
+
+        /* Main content styling */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        /* Scroll styling */
         .container {
-            max-width: 100%;
             overflow-x: auto;
         }
-        .delete-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px; /* Increased padding for delete button */
-            cursor: pointer;
-            font-size: 16px; /* Increased delete button font size */
-        }
-        textarea {
-            width: 100%;
-            height: 50px; /* Default height */
-            resize: none;
-            padding: 5px;
-            box-sizing: border-box;
-            font-size: 16px; /* Increased textarea font size */
-        }
-        /* Smaller input fields for numeric values */
-        .small-input {
-            width: 80px; /* Smaller width for numeric inputs */
-            padding: 5px;
-            font-size: 16px; /* Consistent font size */
-        }
-        /* Larger input fields for text entries */
-        .large-input {
-            width: calc(100% - 10px); /* Fill the available space */
-            height: 50px; /* Increased height for better visibility */
-            padding: 5px;
-            font-size: 16px; /* Consistent font size */
-        }
-        /* Additional larger input for the Furniture Type to accommodate 100 characters */
-        .extra-large-input {
-            width: calc(100% - 10px); /* Full width for more text */
-            height: 100px; /* Increased height for better visibility */
-            padding: 5px;
-            font-size: 16px; /* Consistent font size */
-        }
-        /* Increased size for checkbox */
-        .checkbox {
-            width: 25px; /* Increased width for checkbox */
-            height: 25px; /* Increased height for checkbox */
+
+        table {
+            min-width: 1200px;
         }
     </style>
 </head>
 <body>
 
-<h1>Berchuma Furniture Sales Tracking for <span id="currentMonth">January</span></h1>
-
-<div class="container">
-    <table id="paymentTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone Number</th>
-                <th>Prepaid Amount</th>
-                <th>Item Value</th>
-                <th>Payment Date</th>
-                <th>Furniture Type</th>
-                <th>Manufacturing Days</th>
-                <th>Confirmed Payment</th>
-                <th>Delete Row</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+<div class="sidebar">
+    <a href="javascript:goToCurrentMonth()">Current Month</a>
+    <a href="javascript:previousMonth()">Previous Month</a>
+    <a href="javascript:nextMonth()">Next Month</a>
+    <a href="javascript:saveCurrentMonthData()">Save Data</a>
 </div>
 
-<!-- Button section for actions, including the new Save button -->
-<button class="button" onclick="addRow()">Add Row</button>
-<button class="button" onclick="previousMonth()">Previous Month</button>
-<button class="button" onclick="nextMonth()">Next Month</button>
-<button class="button" onclick="goToCurrentMonth()">Current Month</button>
-<button class="button" onclick="saveCurrentMonthData()">Save Data</button> <!-- Save Data button -->
+<div class="main-content">
+    <h1>Berchuma Furniture Sales Tracking for <span id="currentMonth">January</span></h1>
+
+    <div class="container">
+        <table id="paymentTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Prepaid Amount</th>
+                    <th>Item Value</th>
+                    <th>Payment Date</th>
+                    <th>Furniture Type</th>
+                    <th>Manufacturing Days</th>
+                    <th>Confirmed Payment</th>
+                    <th>Delete Row</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Button section -->
+    <div style="text-align: center; margin-top: 10px;">
+        <button class="button" onclick="addRow()">Add Row</button>
+    </div>
+</div>
 
 <script>
-    // Initialize month and data structure to store data for each month
+    // Your existing JavaScript functions
     let currentMonthIndex = 0;
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const monthlyData = {};
 
-    // Load saved data from localStorage
     function loadData() {
         const savedData = JSON.parse(localStorage.getItem('paymentData')) || {};
         Object.assign(monthlyData, savedData);
         updateTable();
     }
 
-    // Save data to localStorage
-    function saveData() {
-        localStorage.setItem('paymentData', JSON.stringify(monthlyData));
-        alert("Data Saved Successfully!"); // Optional alert for feedback
-    }
-
-    // Update table and title with the current month's data
     function updateTable() {
         const table = document.getElementById('paymentTable').querySelector('tbody');
-        table.innerHTML = ''; // Clear table
+        table.innerHTML = '';
         const currentMonth = months[currentMonthIndex];
 
         if (!monthlyData[currentMonth]) {
@@ -153,12 +190,9 @@
         }
 
         monthlyData[currentMonth].forEach((rowData, index) => addRow(rowData, index));
-
-        // Update title with the current month
         document.getElementById('currentMonth').textContent = currentMonth;
     }
 
-    // Add a new row to the table
     function addRow(data = {name: '', phone: '', prepaid: '', value: '', date: '', furniture: '', days: '', confirmed: false}, index = null) {
         const table = document.getElementById('paymentTable').querySelector('tbody');
         const row = document.createElement('tr');
@@ -178,7 +212,6 @@
         table.appendChild(row);
     }
 
-    // Save data for the current month only when "Save Data" button is clicked
     function saveCurrentMonthData() {
         const table = document.getElementById('paymentTable').querySelector('tbody');
         const rows = table.querySelectorAll('tr');
@@ -196,39 +229,47 @@
             data.push({ name, phone, prepaid, value, date, furniture, days, confirmed });
         });
 
-        monthlyData[months[currentMonthIndex]] = data;
-        saveData(); // Call saveData() only when button is clicked
+        fetch('save_data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.text())
+        .then(result => {
+            alert(result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 
-    // Delete a row based on index
     function deleteRow(index) {
         monthlyData[months[currentMonthIndex]].splice(index, 1);
         updateTable();
     }
 
-    // Move to the previous month and update the table and title
     function previousMonth() {
         currentMonthIndex = (currentMonthIndex - 1 + months.length) % months.length;
         updateTable();
     }
 
-    // Move to the next month and update the table and title
     function nextMonth() {
         currentMonthIndex = (currentMonthIndex + 1) % months.length;
         updateTable();
     }
 
-    // Go to the current month and update the table
     function goToCurrentMonth() {
         const now = new Date();
-        currentMonthIndex = now.getMonth(); // Set current month index
-        updateTable(); // Update table to show current month data
+        currentMonthIndex = now.getMonth();
+        updateTable();
     }
 
-    // Load data when the page is opened
     window.onload = loadData;
 </script>
 
 </body>
 </html>
+
 
