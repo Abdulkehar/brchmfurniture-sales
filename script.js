@@ -1,4 +1,3 @@
-// Your existing JavaScript functions
 let currentMonthIndex = 0;
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthlyData = {};
@@ -26,16 +25,17 @@ function addRow(data = {name: '', phone: '', prepaid: '', value: '', date: '', f
     const table = document.getElementById('paymentTable').querySelector('tbody');
     const row = document.createElement('tr');
 
-    row.innerHTML = 
-        `<td><textarea class="large-input name">${data.name}</textarea></td>
+    row.innerHTML = `
+        <td><textarea class="large-input name">${data.name}</textarea></td>
         <td><textarea class="large-input phone">${data.phone}</textarea></td>
         <td><input type="number" class="small-input prepaid" value="${data.prepaid}" /></td>
         <td><input type="number" class="small-input value" value="${data.value}" /></td>
         <td><input type="date" class="small-input date" value="${data.date}" /></td>
-        <td><textarea class="extra-large-input furniture" rows="4" maxlength="100">${data.furniture}</textarea></td>
+        <td><textarea class="extra-large-input furniture" rows="2" maxlength="100">${data.furniture}</textarea></td>
         <td><input type="number" class="small-input days" value="${data.days}" /></td>
         <td><input type="checkbox" class="checkbox confirmed" ${data.confirmed ? 'checked' : ''} /></td>
-        <td><button class="delete-btn" onclick="deleteRow(${index})">Delete</button></td>`;
+        <td><button class="delete-btn" onclick="deleteRow(${index})">Delete</button></td>
+    `;
 
     table.appendChild(row);
 }
@@ -95,3 +95,4 @@ function goToCurrentMonth() {
 }
 
 window.onload = loadData;
+
